@@ -18,7 +18,7 @@ stages:
     workspace:
       clean: all
     pool:
-      JavaPool      
+      JavaPool1      
     steps:    
     - task: DownloadSecureFile@1
       name: privkey
