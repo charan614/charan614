@@ -5,9 +5,9 @@ trigger:
 
 variables:
 - name: AZSUBSCRIPTION  
-  value: KKAzure
+  value: Free Trial (925e3b70-0bfb-4086-b5fe-e812d2c6923f)
 - name: RESOURCE_GROUP
-  value: tfdemo-rg
+  value: DemoImage
 
 
 stages:
