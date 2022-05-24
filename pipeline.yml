@@ -1,0 +1,43 @@
+name: Tomcat Installation
+trigger: 
+  - main
+  - feature*
+
+variables:
+- name: AZSUBSCRIPTION  
+  value: Free Trial (925e3b70-0bfb-4086-b5fe-e812d2c6923f)
+- name: RESOURCE_GROUP
+  value: DemoImage
+
+
+stages:
+- stage: Install_Tomcat 
+  condition: always()
+  jobs:
+  - job: TomcatInstallation
+    workspace:
+      clean: all
+    pool:
+      Windows      
+    steps:    
+    - task: DownloadSecureFile@1
+      name: privkey
+      displayName: 'Download Private Key'
+      inputs:
+        secureFile: id_demo
+    - script: |                
+        sudo chmod 400 $(privkey.secureFilePath)
+        su  do mkdir -p $HOME/.ssh  
+        cat $(privkey.secureFilePath) > id_rsa
+        # cp id_rsa $HOME/.ssh
+
+    - task: AzureCLI@2
+      displayName: 'Ansible'
+      inputs:
+        azureSubscription: $(AZSUBSCRIPTION)
+        scriptType: bash
+        scriptLocation: scriptPath
+        scriptPath: $(Agent.BuildDirectory)/s/build.sh 
+        Arguments: $(RESOURCE_GROUP)   
+        
+    
